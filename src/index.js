@@ -3,9 +3,10 @@ import path from 'path';
 import readline from 'readline';
 
 import { goUpper, goToDirectory, showListInDirectory } from './directoryfunctionality.js';
-import { addFile, renameFile, deleteFile } from './fileOperations.js';
+import { addFile, renameFile, deleteFile, showContent, copyFile, moveFile } from './fileOperations.js';
 import { calculateHash } from './hasCalc.js';
 import { compress, decompress } from './compression.js';
+import { getOs } from './osInfo.js';
 import { displayGoodbyeMessage, displayInvalidInputMessage, displayOperationFailedMessage, displayWelcomeMessage, printWorkingDirectory } from './messageHelper.js';
 
 
@@ -25,7 +26,7 @@ process.on('exit', handleExit);
 
 
 const handleUserInput = async (input) => {
-    const [command, ...args] = input.trim().split(' ');
+    const [command, ...args] = input.trim().split(' ').filter(el => el !== "");
 
     switch (command) {
         case '.exit':
@@ -56,9 +57,33 @@ const handleUserInput = async (input) => {
             }
             break;
 
+        case 'cat':
+            try {
+                await showContent(args[0]);
+            } catch (error) {
+                displayOperationFailedMessage();
+            }
+            break;
+
         case 'add':
             try {
                 await addFile(args[0]);
+            } catch (error) {
+                displayOperationFailedMessage();
+            }
+            break;
+
+        case 'cp':
+            try {
+                await copyFile(args[0], args[1]);
+            } catch (error) {
+                displayOperationFailedMessage();
+            }
+            break;
+
+        case 'mv':
+            try {
+                await moveFile(args[0], args[1]);
             } catch (error) {
                 displayOperationFailedMessage();
             }
@@ -80,6 +105,13 @@ const handleUserInput = async (input) => {
             }
             break;
 
+        case 'os':
+            try {
+                await getOs(args[0]);
+            } catch (error) {
+                displayOperationFailedMessage();
+            }
+            break;
 
         case 'hash':
             try {

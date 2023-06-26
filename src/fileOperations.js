@@ -1,7 +1,24 @@
 import { writeFile} from "node:fs/promises";
 import { rename } from 'node:fs/promises';
 import { unlink } from 'node:fs/promises';
-import { displayInvalidInputMessage } from "./messageHelper.js";
+import { createReadStream, createWriteStream} from "node:fs";
+import { displayInvalidInputMessage, printWorkingDirectory } from "./messageHelper.js";
+
+
+export const showContent = async (filename) => {
+    try {
+        const inp = createReadStream(filename, 'utf-8');
+        inp.on('data', (chunk) => {
+            console.log(chunk);
+          });
+        inp.on('end', () => {
+            printWorkingDirectory();
+          }); 
+    } catch (error) {
+        console.log(error);
+        displayInvalidInputMessage();
+    }
+};
 
 export const addFile = async (filename) => {
 
@@ -15,6 +32,36 @@ export const addFile = async (filename) => {
     }
 };
 
+export const copyFile = async (filePath, newFilePath) => {
+    try {
+        const inp = createReadStream(filePath);
+        const out = createWriteStream(newFilePath);
+        inp.pipe(out);
+
+        await new Promise((resolve) => {out.on('finish', resolve)});
+        console.log('File copied');
+        printWorkingDirectory();
+    } catch (error) {
+        console.log(error);
+        displayInvalidInputMessage();
+    }
+};
+
+export const moveFile = async (filePath, newFilePath) => {
+    try {
+        const inp = createReadStream(filePath);
+        const out = createWriteStream(newFilePath);
+        inp.pipe(out);
+
+        await new Promise((resolve) => {out.on('finish', resolve)});
+        await unlink(filePath);
+        console.log('File moved');
+    
+    } catch (error) {
+        console.log(error);
+        displayInvalidInputMessage();
+    }
+};
 
 
 export const renameFile = async (filename, newFilename) => {
