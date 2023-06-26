@@ -5,7 +5,7 @@ import { displayInvalidInputMessage } from "./messageHelper.js";
 export const calculateHash = async (filename) => {
   
     try {
-        const contentOfFile = await readFile(`${process.cwd()}/${filename}`);
+        const contentOfFile = await readFile(filename);
         const hash = createHash('sha256');
         hash.update(contentOfFile);
         const digest = hash.digest('hex');
