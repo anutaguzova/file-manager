@@ -26,7 +26,7 @@ process.on('exit', handleExit);
 
 
 const handleUserInput = async (input) => {
-    const [command, ...args] = input.trim().split(' ');
+    const [command, ...args] = input.trim().split(' ').filter(el => el !== "");
 
     switch (command) {
         case '.exit':
