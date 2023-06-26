@@ -3,7 +3,7 @@ import path from 'path';
 import readline from 'readline';
 
 import { goUpper, goToDirectory, showListInDirectory } from './directoryfunctionality.js';
-import { addFile, renameFile, deleteFile } from './fileOperations.js';
+import { addFile, renameFile, deleteFile, showContent } from './fileOperations.js';
 import { calculateHash } from './hasCalc.js';
 import { compress, decompress } from './compression.js';
 import { getOs } from './osInfo.js';
@@ -52,6 +52,14 @@ const handleUserInput = async (input) => {
         case 'ls':
             try {
                 await showListInDirectory();
+            } catch (error) {
+                displayOperationFailedMessage();
+            }
+            break;
+
+        case 'cat':
+            try {
+                await showContent(args[0]);
             } catch (error) {
                 displayOperationFailedMessage();
             }

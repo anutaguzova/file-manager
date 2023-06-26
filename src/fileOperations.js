@@ -1,7 +1,24 @@
 import { writeFile} from "node:fs/promises";
 import { rename } from 'node:fs/promises';
 import { unlink } from 'node:fs/promises';
-import { displayInvalidInputMessage } from "./messageHelper.js";
+import { createReadStream} from "node:fs";
+import { displayInvalidInputMessage, printWorkingDirectory } from "./messageHelper.js";
+
+
+export const showContent = async (filename) => {
+    try {
+        const inp = createReadStream(filename, 'utf-8');
+        inp.on('data', (chunk) => {
+            console.log(chunk);
+          });
+        inp.on('end', () => {
+            printWorkingDirectory();
+          }); 
+    } catch (error) {
+        console.log(error);
+        displayInvalidInputMessage();
+    }
+};
 
 export const addFile = async (filename) => {
 
