@@ -6,6 +6,7 @@ import { goUpper, goToDirectory, showListInDirectory } from './directoryfunction
 import { addFile, renameFile, deleteFile } from './fileOperations.js';
 import { calculateHash } from './hasCalc.js';
 import { compress, decompress } from './compression.js';
+import { getOs } from './osInfo.js';
 import { displayGoodbyeMessage, displayInvalidInputMessage, displayOperationFailedMessage, displayWelcomeMessage, printWorkingDirectory } from './messageHelper.js';
 
 
@@ -80,6 +81,13 @@ const handleUserInput = async (input) => {
             }
             break;
 
+        case 'os':
+            try {
+                await getOs(args[0]);
+            } catch (error) {
+                displayOperationFailedMessage();
+            }
+            break;
 
         case 'hash':
             try {
