@@ -3,7 +3,7 @@ import path from 'path';
 import readline from 'readline';
 
 import { goUpper, goToDirectory, showListInDirectory } from './directoryfunctionality.js';
-import { addFile, renameFile, deleteFile, showContent, copyFile } from './fileOperations.js';
+import { addFile, renameFile, deleteFile, showContent, copyFile, moveFile } from './fileOperations.js';
 import { calculateHash } from './hasCalc.js';
 import { compress, decompress } from './compression.js';
 import { getOs } from './osInfo.js';
@@ -76,6 +76,14 @@ const handleUserInput = async (input) => {
         case 'cp':
             try {
                 await copyFile(args[0], args[1]);
+            } catch (error) {
+                displayOperationFailedMessage();
+            }
+            break;
+
+        case 'mv':
+            try {
+                await moveFile(args[0], args[1]);
             } catch (error) {
                 displayOperationFailedMessage();
             }

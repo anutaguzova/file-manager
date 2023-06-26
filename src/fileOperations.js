@@ -47,6 +47,21 @@ export const copyFile = async (filePath, newFilePath) => {
     }
 };
 
+export const moveFile = async (filePath, newFilePath) => {
+    try {
+        const inp = createReadStream(filePath);
+        const out = createWriteStream(newFilePath);
+        inp.pipe(out);
+
+        await new Promise((resolve) => {out.on('finish', resolve)});
+        await unlink(filePath);
+        console.log('File moved');
+    
+    } catch (error) {
+        console.log(error);
+        displayInvalidInputMessage();
+    }
+};
 
 
 export const renameFile = async (filename, newFilename) => {
